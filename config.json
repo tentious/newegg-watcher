@@ -1,6 +1,6 @@
 {
 	"items": [
-		"<NEWEGG_ITEM_NUMBER>",
+		"NEWEGG_ITEM_NUMBER",
 		"<NEWEGG_ITEM_NUMBER>",
 		"<NEWEGG_ITEM_NUMBER>",
 		"<NEWEGG_ITEM_NUMBER>"
@@ -14,6 +14,8 @@
                         ]
                 },
                 "sender": {
+			"SMTPserver": "<SMTP_server>",
+			"SMTPport": "<SMTP_port>",
                         "address": "<SENDER_GMAIL_ADDRESS>",
                         "password": "<SENDER_GMAIL_PASSWORD>"
                 }

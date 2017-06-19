@@ -26,6 +26,10 @@ make run
 Modify path to point to your cloned repository
 
 ## configuration
+You can define a configuraiton file at the command line:
+./newegg-watcher -config=config.json
+If no config file is defined, config.json will be loaded
+
 Modify config.json file 
  - items field: the newegg item number
  - email fields: sender/receiver email address

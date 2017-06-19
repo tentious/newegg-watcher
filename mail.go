@@ -8,6 +8,8 @@ import (
 )
 
 func sendMail(title, url, price string, total, limit int) {
+	server := config.Email.Sender.SMTPserver
+	port := config.Email.Sender.SMTPport
 	from := config.Email.Sender.Address
 	pass := config.Email.Sender.Password
 	to := config.Email.Receiver.Address
@@ -22,8 +24,8 @@ func sendMail(title, url, price string, total, limit int) {
 		"Total: " + strconv.Itoa(total) + "\n\n\n\n\n" +
 		"sent using https://github.com/gspencerfabian/newegg-watcher"
 
-	err := smtp.SendMail("smtp.gmail.com:587",
-		smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
+	err := smtp.SendMail(server + ":" + port,
+		smtp.PlainAuth("", from, pass, server),
 		from, to, []byte(msg))
 
 	if err != nil {

@@ -27,6 +27,8 @@ type Config struct {
 			Address []string `json:"address"`
 		} `json:"receiver"`
 		Sender struct {
+			SMTPserver string `json:"SMTPserver"`
+			SMTPport string `json:"SMTPport"`
 			Address  string `json:"address"`
 			Password string `json:"password"`
 		} `json:"sender"`

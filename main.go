@@ -6,10 +6,13 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"flag"
 )
 
 func init() {
-	loadConfig("./config.json")
+	ConfigFile := flag.String("config","./config.json","Define Config File")
+	flag.Parse()
+	loadConfig(*ConfigFile)
 }
 
 func main() {
