@@ -1,0 +1,3 @@
+[submodule "pushbullet-go"]
+	path = pushbullet-go
+	url = https://github.com/mitsuse/pushbullet-go.git
