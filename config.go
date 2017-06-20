@@ -34,6 +34,9 @@ type Config struct {
 		} `json:"sender"`
 	} `json:"email"`
 	Items  []string `json:"items"`
+	PushBullet  struct {
+		Token string `json:"pbtoken"`
+	} `json:"pushbullet"`
 	Limits struct {
 		Price struct {
 			Max int `json:"max"`

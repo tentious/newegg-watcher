@@ -65,6 +65,9 @@ func main() {
 		if data.Basic.Instock && data.Basic.AddToCartText == "Add To Cart" {
 			log.Println("[IN STOCK] - " + strconv.Itoa(data.Basic.SellerCount) + " total. " + strconv.Itoa(data.Additional.LimitQuantity) + " limit per person. " + web_url)
 			sendMail(data.Basic.Title, web_url, data.Basic.FinalPrice, data.Basic.SellerCount, data.Additional.LimitQuantity)
+			if config.PushBullet.Token != "" {
+				sendPush(data.Basic.Title, web_url, data.Basic.FinalPrice, data.Basic.SellerCount, data.Additional.LimitQuantity)
+			}
 		} else {
 			log.Println("[NOT IN STOCK] - " + web_url)
 		}

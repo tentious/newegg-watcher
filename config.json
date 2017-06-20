@@ -1,6 +1,6 @@
 {
 	"items": [
-		"NEWEGG_ITEM_NUMBER",
+		"<NEWEGG_ITEM_NUMBER>",
 		"<NEWEGG_ITEM_NUMBER>",
 		"<NEWEGG_ITEM_NUMBER>",
 		"<NEWEGG_ITEM_NUMBER>"
@@ -19,6 +19,9 @@
                         "address": "<SENDER_GMAIL_ADDRESS>",
                         "password": "<SENDER_GMAIL_PASSWORD>"
                 }
+        },
+	"pushbullet": {
+                "pbtoken": ""
         },
 	"limits": {
 		"price": {
