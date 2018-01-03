@@ -4,12 +4,13 @@ A Golang inventory monitoring/notification script for [newegg.com](http://newegg
 Because newegg's auto-notify is not always available for certain products. Also, this script is much faster at detecting inventory and sending out emails.
 
 ## requirements
- - Be sure that golang is installed. If not, get it [here](https://golang.org/dl/).
+ - Make sure dependencies are installed ("apt-get install git make go-lang ca-certificates").
  - Google email address. **NOTE** you must allow less secure apps to access your account. [Learn More](https://support.google.com/accounts/answer/6010255?hl=en)
+ - You can also use standard SMTP or Pushbullet.
 
 ## how to install
 ```
-git clone https://github.com/gspencerfabian/newegg-watcher.git
+git clone --recursive https://github.com/tentious/newegg-watcher.git
 cd newegg-watcher
 make build
 ```
