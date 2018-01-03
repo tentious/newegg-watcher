@@ -22,7 +22,7 @@ func sendMail(title, url, price string, total, limit int) {
 		"Price: " + price + "\n" +
 		"Limit: " + strconv.Itoa(limit) + "\n" +
 		"Total: " + strconv.Itoa(total) + "\n\n\n\n\n" +
-		"sent using https://github.com/gspencerfabian/newegg-watcher"
+		"sent using https://github.com/tentious/newegg-watcher"
 
 	err := smtp.SendMail(server + ":" + port,
 		smtp.PlainAuth("", from, pass, server),
