@@ -29,7 +29,24 @@ func main() {
 		web_url := "https://www.newegg.com/Product/Product.aspx?Item=" + item
 		api_url := "http://www.ows.newegg.com/Products.egg/" + item
 		client := &http.Client{}
-		log.Println("Checking item: " + item)
+
+                log.Println("Checking item: " + item)
+
+		var timecompare time.Time
+                if err := db.Get(item, &timecompare); err == skv.ErrNotFound {
+
+                        } else if err != nil {
+                                log.Println("A DB error occured: ")
+                                log.Fatalln(err)
+                        } else {
+                                //Compare
+                                log.Println("Notifcation last sent for this item was: " + timecompare.Format("Mon Jan _2 15:04:05 2006"))
+                                if time.Now().Sub(timecompare).Hours() < config.Limits.NotifyDelay.Hours{
+                                        log.Println("Notifcation already sent for this item in the past " + string(strconv.FormatFloat(config.Limits.NotifyDelay.Hours, 'f', 2, 64)) + " hours. Skipping notifications...")
+                                        continue
+                                }
+                        }
+
 		req, err := http.NewRequest("GET", api_url, nil)
 		if err != nil {
 			log.Fatalln(err)
@@ -68,24 +85,9 @@ func main() {
 			continue
 		}
 
-		var timecompare time.Time
-		if err := db.Get(item, &timecompare); err == skv.ErrNotFound {
-			log.Println("Item not found in DB... Adding item:" + item + " to the DB.")
-			db.Put(item, time.Now());
-			} else if err != nil {
-                                log.Println("A DB error occured: ")
-				log.Fatalln(err)
-			} else {
-				//Compare
-				log.Println("Notifcation last sent for this item was: " + timecompare.Format("Mon Jan _2 15:04:05 2006"))
-				if time.Now().Sub(timecompare).Hours() < config.Limits.NotifyDelay.Hours{
-					log.Println("Notifcation already sent for this item in the past " + string(strconv.FormatFloat(config.Limits.NotifyDelay.Hours, 'f', 2, 64)) + " hours. Skipping notifications...")
-					continue
-				}
-			}
-
-		// if its in stock then send email
+		// if its in stock and no notifications in the past x hours then send email
 		if data.Basic.Instock && data.Basic.AddToCartText == "Add To Cart" {
+			db.Put(item, time.Now());
 			log.Println("[IN STOCK] - " + strconv.Itoa(data.Basic.SellerCount) + " total. " + strconv.Itoa(data.Additional.LimitQuantity) + " limit per person. " + web_url)
 			sendMail(data.Basic.Title, web_url, data.Basic.FinalPrice, data.Basic.SellerCount, data.Additional.LimitQuantity)
 			if config.PushBullet.Token != "" {
