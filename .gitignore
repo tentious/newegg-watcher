@@ -2,3 +2,4 @@ config
 config/*
 newegg-watcher-live
 newegg-watcher
+skv.db

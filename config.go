@@ -42,5 +42,8 @@ type Config struct {
 			Max int `json:"max"`
 			Min int `json:"min"`
 		} `json:"price"`
+                NotifyDelay struct {
+                        Hours float64 `json:"hours"`
+                } `json:"notifydelay"`
 	} `json:"limits"`
 }

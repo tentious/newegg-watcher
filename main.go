@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"flag"
+	"time"
+	"github.com/rapidloop/skv"
 )
 
 func init() {
@@ -18,11 +20,16 @@ func init() {
 func main() {
 	log.Println("Starting inventory search...")
 	// loop for items in config to build and execute http requests
+	db, err := skv.Open("skv.db")
+	if err != nil {
+		log.Println(err)
+	}
+
 	for _, item := range config.Items {
 		web_url := "https://www.newegg.com/Product/Product.aspx?Item=" + item
 		api_url := "http://www.ows.newegg.com/Products.egg/" + item
 		client := &http.Client{}
-
+		log.Println("Checking item: " + item)
 		req, err := http.NewRequest("GET", api_url, nil)
 		if err != nil {
 			log.Fatalln(err)
@@ -61,6 +68,22 @@ func main() {
 			continue
 		}
 
+		var timecompare time.Time
+		if err := db.Get(item, &timecompare); err == skv.ErrNotFound {
+			log.Println("Item not found in DB... Adding item:" + item + " to the DB.")
+			db.Put(item, time.Now());
+			} else if err != nil {
+                                log.Println("A DB error occured: ")
+				log.Fatalln(err)
+			} else {
+				//Compare
+				log.Println("Notifcation last sent for this item was: " + timecompare.Format("Mon Jan _2 15:04:05 2006"))
+				if time.Now().Sub(timecompare).Hours() < config.Limits.NotifyDelay.Hours{
+					log.Println("Notifcation already sent for this item in the past " + string(strconv.FormatFloat(config.Limits.NotifyDelay.Hours, 'f', 2, 64)) + " hours. Skipping notifications...")
+					continue
+				}
+			}
+
 		// if its in stock then send email
 		if data.Basic.Instock && data.Basic.AddToCartText == "Add To Cart" {
 			log.Println("[IN STOCK] - " + strconv.Itoa(data.Basic.SellerCount) + " total. " + strconv.Itoa(data.Additional.LimitQuantity) + " limit per person. " + web_url)
@@ -70,9 +93,11 @@ func main() {
 			}
 		} else {
 			log.Println("[NOT IN STOCK] - " + web_url)
-		}
-	}
+		}	}
 	log.Println("Complete.")
+	if err := db.Close(); err != nil {
+	log.Fatalln(err)
+        }
 }
 
 type Payload struct {
